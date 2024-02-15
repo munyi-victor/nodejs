@@ -1,42 +1,20 @@
-const express = require("express");
 const mysql = require("mysql");
-const cors = require("cors");
+const dotenv = require("dotenv");
 
-const app = express();
-app.use(cors());
+dotenv.config();
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "users"
+const config = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB,
+};
+
+
+const pool = mysql.createPool(config);
+
+pool.on("error", (err) => {
+  console.error("Error connecting to database:", err);
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error("Error connecting to db: ", err);
-    return;
-  }
-  console.log("Connected to database");
-})
-
-const fetchsql = `SELECT * FROM user`;
-
-db.query(fetchsql, (err, results) => {
-  if (err) {
-    console.error("error: ", err);
-    return;
-  } else {
-    console.log("retrieved data: ");
-  }
-  
-  for (const row of results) {
-    console.log("Name: ", row.name);
-    console.log("Email: ", row.email);
-  }
-})
-
-
-app.listen(3001, () => {
-  console.log("Server running at port 3001");
-})
+module.exports = pool;

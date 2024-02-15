@@ -1,36 +1,23 @@
-const express = require('express');
-const cors = require('cors');
-const mysql = require('mysql');
+const express = require("express");
+const cors = require("cors");
+
+const pool = require("./db");
 
 const app = express();
+app.use(cors());
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'hired'
-})
-
-db.connect((err) => {
-  if (err) {
-    console.error(err);
-  }
-
-  console.log('connected to database');
-})
-
-app.get('/students', (req, res) => {
-  const sql = 'SELECT * FROM student'
-  db.query(sql, (err, results) => {
+app.get("/users", (req, res) => {
+  // Query the database to fetch user data
+  pool.query("SELECT * FROM user", (err, results) => {
     if (err) {
-      res.status(500).send('Error fetching data');
+      console.error("Database query error:", err);
+      res.status(500).send("Internal Server Error");
       return;
-    } else {
-      res.status(200).json(results);
     }
-  })
-})
+    res.json(results);
+  });
+});
 
-app.listen(3001, () => {
-  console.log('listening on port 3001');
-})
+app.listen(3000, () => {
+  console.log("Server listening on port 3000");
+});
