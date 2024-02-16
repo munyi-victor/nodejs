@@ -1,22 +1,45 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const userListElement = document.getElementById("userList");
+document.addEventListener("DOMContentLoaded", fetchData);
 
-  // Fetch data from the server
-  fetch("http://localhost:3000/users", { mode: "no-cors" })
-    .then(results => {
-      
-    })
-    // .then((users) => {
-    //   // Update the HTML content with the fetched data
+async function fetchData() {
+  try {
+    const response = await fetch("http://localhost:3000/users");
+    const data = await response.json();
 
-    //   console.log(users)
-    //   // for (user in users) {
-    //   //   const listItem = document.createElement("li");
-    //   //   userListElement.textContent = `${user}`;
-    //   //   userListElement.appendChild(listItem);
-    //   // }
-    // })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
+    // Update the UI with the fetched data
+    const userName = document.getElementById("user-name");
+    const userEmail = document.getElementById("user-email");
+
+    userName.innerHTML = data.map((row) => `<p>${row.name}</p>`).join("");
+    userEmail.innerHTML = data.map((row) => `<p>${row.email}</p>`).join("");
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+// posting form data
+
+async function postData() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("http://localhost:3000/addUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
     });
-});
+
+    if (response.ok) {
+      console.log("Data submitted successfully");
+      fetchData(); // Refresh the displayed data
+    } else {
+      console.error("Error submitting data:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+}

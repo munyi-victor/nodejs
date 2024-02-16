@@ -4,11 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>List</title>
+
+  <style>
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border: 1px solid black;
+      padding: 0 14px;
+      gap: 10px;
+      width: 50vw;
+    }
+    .grid p {
+      border: 1px solid black;
+      padding: 8px;
+    }
+    #dataForm{
+      width: 50vw;
+      background-color: #eee;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #dataForm div{
+      display: flex;
+      flex-direction: column;
+    }
+    #dataForm div label {
+      font-size: 18px;
+    }
+    #dataForm div input {
+      font-size: 16px;
+      padding: 6px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
   <h1>User List</h1>
 
-  <p id="userList"></p>
+  <div class="grid">
+    <p style="font-weight: bold;">Name</p>
+    <p style="font-weight: bold;">Email</p>
+    <p id="user-name"></p>
+    <p id="user-email"></p>
+  </div>
+
+  <div>
+    <form id="dataForm">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter name" required>
+      </div>
+
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
+      </div>
+
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Create password" required>
+      </div>
+
+      <button type="button" onclick="postData()">Submit</button>
+    </form>
+
+    <ul id="dataList"></ul>
+  </div>
 
   <script src="main.js"></script>
 </body>

@@ -11,10 +11,15 @@ const config = {
 };
 
 
-const pool = mysql.createPool(config);
+const connection = mysql.createConnection(config);
 
-pool.on("error", (err) => {
-  console.error("Error connecting to database:", err);
-});
+connection.connect((error) => {
+  if (error) {
+    console.error("Error connecting to DB");
+    return;
+  } else {
+    console.log("Connected to DB succesfully");
+  }
+})
 
-module.exports = pool;
+module.exports = connection;
